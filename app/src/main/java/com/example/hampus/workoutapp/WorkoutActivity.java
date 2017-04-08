@@ -37,14 +37,13 @@ public class WorkoutActivity extends ListActivity {
         this.workoutDataSrc = new WorkoutDataSource(this);
         this.workoutDataSrc.open();
 
-        List<Workout> workouts = this.workoutDataSrc.getAllWorkouts();
+        Workout workout = this.workoutDataSrc.getWorkout(this.workoutName);
 
-        List<String> strings = new ArrayList<>();
-        for(Workout workout: workouts){
-            strings.add(workout.getName());
-        }
+        List<String> exerciseNames = new ArrayList<>();
+        for (Exercise e: workout.getExercises())
+            exerciseNames.add(e.getName());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         setListAdapter(adapter);
     }
     @Override

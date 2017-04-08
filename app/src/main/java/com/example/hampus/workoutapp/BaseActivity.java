@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.hampus.workoutapp.database.dao.ExerciseDataSource;
 import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
     private WorkoutDataSource workoutDataSrc;
+    private ExerciseDataSource exerciseDataSrc;
     private LinearLayout layout;
     private ArrayList<Button> allBtn;
 
@@ -30,10 +32,30 @@ public class BaseActivity extends AppCompatActivity {
     private void initiateDB(){
         this.workoutDataSrc = new WorkoutDataSource(this);
         this.workoutDataSrc.open();
+        this.exerciseDataSrc = new ExerciseDataSource(this);
+        this.exerciseDataSrc.open();
 
         // Loading the database with data
-        workoutDataSrc.createWorkout("Heavy liftin", "Flex them muscles.");
-        workoutDataSrc.createWorkout("Running", "Run fast af.");
+        List<Exercise> exercises1 = new ArrayList<>();
+        Exercise exercise;
+        int i = 0;
+        for(; i < 2; i++){
+            exercise = exerciseDataSrc.createExercise("Exercise" + Integer.toString(i), "desc");
+            if(exercise != null){
+                exercises1.add(exercise);
+            }
+        }
+
+        List<Exercise> exercises2 = new ArrayList<>();
+        for(int j = i; j < i+2; j++){
+            exercise = exerciseDataSrc.createExercise("Exercise" + Integer.toString(j), "desc");
+            if(exercise != null){
+                exercises2.add(exercise);
+            }
+        }
+
+        workoutDataSrc.createWorkout("Heavy liftin", exercises1);
+        workoutDataSrc.createWorkout("Running", exercises2);
 
     }
 
@@ -43,7 +65,7 @@ public class BaseActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
         allBtn = new ArrayList<>();
 
-        for (int i = 0; i<workouts.size(); i++) {
+        for (int i = 0; i < workouts.size(); i++) {
             LinearLayout row = new LinearLayout(this);
             row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 

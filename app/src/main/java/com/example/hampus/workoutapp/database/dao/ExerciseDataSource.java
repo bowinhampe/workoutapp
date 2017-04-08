@@ -33,12 +33,16 @@ public class ExerciseDataSource extends DataSource{
         long insertId = this.getDb().insert(DatabaseHandler.TABLE_EXERCISES, null,
                 values);
 
-        Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_EXERCISES,
-                this.getColumns(), DatabaseHandler.EXERCISES_COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        Exercise newExercise = cursorToExercise(cursor);
-        cursor.close();
+        Exercise newExercise = null;
+        if (insertId != -1) {
+            Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_EXERCISES,
+                    this.getColumns(), DatabaseHandler.EXERCISES_COLUMN_ID + " = " + insertId, null,
+                    null, null, null);
+            cursor.moveToFirst();
+            newExercise = cursorToExercise(cursor);
+            cursor.close();
+        }
+
         return newExercise;
     }
 
