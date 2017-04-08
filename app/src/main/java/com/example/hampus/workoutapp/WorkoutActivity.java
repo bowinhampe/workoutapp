@@ -1,7 +1,6 @@
 package com.example.hampus.workoutapp;
 
 import android.app.ListActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -14,6 +13,7 @@ import java.util.List;
 public class WorkoutActivity extends ListActivity {
     private WorkoutDataSource workoutDataSrc;
     private String workoutName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +42,6 @@ public class WorkoutActivity extends ListActivity {
         List<String> strings = new ArrayList<>();
         for(Workout workout: workouts){
             strings.add(workout.getName());
-            strings.add(workout.getDescription());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);

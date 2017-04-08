@@ -1,16 +1,13 @@
 package com.example.hampus.workoutapp;
 
-import java.util.List;
-
 /**
- * Created by Daniel on 4/8/2017.
+ * Created by Daniel on 4/7/2017.
  */
 
-public class Workout {
+public class Exercise {
     private long id;
     private String name;
-    //private WorkoutExercise;
-    private List<Exercise> exercises;
+    private String description;
 
     public long getId() {
         return id;
@@ -28,11 +25,11 @@ public class Workout {
         this.name = name;
     }
 
-    public List<Exercise> getExercises() {
-        return exercises;
+    public String getDescription() {
+        return description;
     }
 
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
