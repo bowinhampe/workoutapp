@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.hampus.workoutapp.database.DatabaseHandler;
 import com.example.hampus.workoutapp.Workout;
@@ -29,6 +30,7 @@ public class WorkoutDataSource {
 
     public void open() throws SQLException {
         this.db = this.dbHelper.getWritableDatabase();
+        // Use with SD-Card db.openOrCreateDatabase
     }
 
     public void close() {

@@ -3,6 +3,7 @@ package com.example.hampus.workoutapp;
 import android.app.ListActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
@@ -12,30 +13,41 @@ import java.util.List;
 
 public class WorkoutActivity extends ListActivity {
     private WorkoutDataSource workoutDataSrc;
-
+    private String workoutName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                workoutName= null;
+            } else {
+                workoutName= extras.getString("WorkoutName");
+            }
+        } else {
+            workoutName= (String) savedInstanceState.getSerializable("WorkoutName");
+        }
+        Log.d("DEBUG",workoutName);
+        this.initiateDB();
+    }
+
+    private void initiateDB(){
         this.workoutDataSrc = new WorkoutDataSource(this);
         this.workoutDataSrc.open();
-
-        // Loading the database with data
-        workoutDataSrc.createWorkout("Heavy liftin", "Flex them muscles.");
-        workoutDataSrc.createWorkout("Running", "Run fast af.");
 
         List<Workout> workouts = this.workoutDataSrc.getAllWorkouts();
 
         List<String> strings = new ArrayList<>();
         for(Workout workout: workouts){
             strings.add(workout.getName());
+            strings.add(workout.getDescription());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
         setListAdapter(adapter);
     }
-
     @Override
     protected void onResume() {
         this.workoutDataSrc.open();
