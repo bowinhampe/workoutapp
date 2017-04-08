@@ -6,8 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.hampus.workoutapp.database.DatabaseHandler;
+import com.example.hampus.workoutapp.Exercise;
 import com.example.hampus.workoutapp.Workout;
+import com.example.hampus.workoutapp.database.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,35 +17,25 @@ import java.util.List;
  * Created by Daniel on 4/7/2017.
  */
 
-public class WorkoutDataSource {
-    private SQLiteDatabase db;
-    private DatabaseHandler dbHelper;
-    private String[] columns = { DatabaseHandler.WORKOUTS_COLUMN_ID,
-            DatabaseHandler.WORKOUTS_COLUMN_NAME,
-            DatabaseHandler.WORKOUTS_COLUMN_DESCRIPTION };
+public class WorkoutDataSource extends DataSource {
 
     public WorkoutDataSource(Context context) {
-        this.dbHelper = new DatabaseHandler(context);
-    }
+        super(context);
 
-    public void open() throws SQLException {
-        this.db = this.dbHelper.getWritableDatabase();
-    }
-
-    public void close() {
-        this.dbHelper.close();
+        String[] columns = { DatabaseHandler.WORKOUTS_COLUMN_ID,
+                DatabaseHandler.EXERCISES_COLUMN_NAME };
+        this.setColumns(columns);
     }
 
     public Workout createWorkout(String name, String description) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHandler.WORKOUTS_COLUMN_NAME, name);
-        values.put(DatabaseHandler.WORKOUTS_COLUMN_DESCRIPTION, description);
 
-        long insertId = this.db.insert(DatabaseHandler.TABLE_WORKOUTS, null,
+        long insertId = this.getDb().insert(DatabaseHandler.TABLE_WORKOUTS, null,
                 values);
 
-        Cursor cursor = this.db.query(DatabaseHandler.TABLE_WORKOUTS,
-                this.columns, DatabaseHandler.WORKOUTS_COLUMN_ID + " = " + insertId, null,
+        Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_WORKOUTS,
+                this.getColumns(), DatabaseHandler.WORKOUTS_COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         Workout newWorkout = cursorToWorkout(cursor);
@@ -54,15 +45,15 @@ public class WorkoutDataSource {
 
     public void deleteWorkout(Workout workout) {
         long id = workout.getId();
-        this.db.delete(DatabaseHandler.TABLE_WORKOUTS, DatabaseHandler.WORKOUTS_COLUMN_ID
+        this.getDb().delete(DatabaseHandler.TABLE_WORKOUTS, DatabaseHandler.WORKOUTS_COLUMN_ID
                 + " = " + id, null);
     }
 
     public List<Workout> getAllWorkouts() {
-        List<Workout> workouts = new ArrayList<Workout>();
+        List<Workout> workouts = new ArrayList<>();
 
-        Cursor cursor = this.db.query(DatabaseHandler.TABLE_WORKOUTS,
-                this.columns, null, null, null, null, null);
+        Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_WORKOUTS,
+                this.getColumns(), null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -76,10 +67,9 @@ public class WorkoutDataSource {
     }
 
     private Workout cursorToWorkout(Cursor cursor) {
-        Workout workout= new Workout();
+        Workout workout = new Workout();
         workout.setId(cursor.getLong(0));
         workout.setName(cursor.getString(1));
-        workout.setDescription(cursor.getString(2));
         return workout;
     }
 }

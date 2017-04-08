@@ -1,35 +1,34 @@
 package com.example.hampus.workoutapp;
 
 import android.app.ListActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
-import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
+import com.example.hampus.workoutapp.database.dao.ExerciseDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkoutActivity extends ListActivity {
-    private WorkoutDataSource workoutDataSrc;
+public class ExerciseActivity extends ListActivity {
+    private ExerciseDataSource exerciseDataSrc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        this.workoutDataSrc = new WorkoutDataSource(this);
-        this.workoutDataSrc.open();
+        this.exerciseDataSrc = new ExerciseDataSource(this);
+        this.exerciseDataSrc.open();
 
         // Loading the database with data
-        workoutDataSrc.createWorkout("Heavy liftin", "Flex them muscles.");
-        workoutDataSrc.createWorkout("Running", "Run fast af.");
+        exerciseDataSrc.createExercise("Heavy liftin", "Flex them muscles.");
+        exerciseDataSrc.createExercise("Running", "Run fast af.");
 
-        List<Workout> workouts = this.workoutDataSrc.getAllWorkouts();
+        List<Exercise> exercises = this.exerciseDataSrc.getAllExercises();
 
         List<String> strings = new ArrayList<>();
-        for(Workout workout: workouts){
-            strings.add(workout.getName());
+        for(Exercise exercise : exercises){
+            strings.add(exercise.getName());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
@@ -38,13 +37,13 @@ public class WorkoutActivity extends ListActivity {
 
     @Override
     protected void onResume() {
-        this.workoutDataSrc.open();
+        this.exerciseDataSrc.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        this.workoutDataSrc.close();
+        this.exerciseDataSrc.close();
         super.onPause();
     }
 }

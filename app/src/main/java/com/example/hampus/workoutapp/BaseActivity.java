@@ -14,7 +14,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showWorkouts(View view) {
-        Intent intent = new Intent(this, WorkoutActivity.class);
+        Intent intent = new Intent(this, ExerciseActivity.class);
         startActivity(intent);
     }
 }
