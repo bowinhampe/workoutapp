@@ -2,4 +2,5 @@
     <string name="app_name">WorkoutApp</string>
     <string name="btn_workout">Workouts</string>
     <string name="title_activity_workout">WorkoutActivity</string>
+    <string name="your_workouts_activity_base">All workouts</string>
 </resources>

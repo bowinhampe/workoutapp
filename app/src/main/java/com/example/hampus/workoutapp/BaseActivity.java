@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.hampus.workoutapp.database.dao.ExerciseDataSource;
 import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
     private WorkoutDataSource workoutDataSrc;
+    private ExerciseDataSource exerciseDataSrc;
     private LinearLayout layout;
     private ArrayList<Button> allBtn;
 
@@ -31,10 +33,30 @@ public class BaseActivity extends AppCompatActivity {
     private void initiateDB(){
         this.workoutDataSrc = new WorkoutDataSource(this);
         this.workoutDataSrc.open();
+        this.exerciseDataSrc = new ExerciseDataSource(this);
+        this.exerciseDataSrc.open();
 
         // Loading the database with data
-        workoutDataSrc.createWorkout("Heavy liftin", "Flex them muscles.");
-        workoutDataSrc.createWorkout("Running", "Run fast af.");
+        List<Exercise> exercises1 = new ArrayList<>();
+        Exercise exercise;
+        int i = 0;
+        for(; i < 2; i++){
+            exercise = exerciseDataSrc.createExercise("Exercise" + Integer.toString(i), "desc");
+            if(exercise != null){
+                exercises1.add(exercise);
+            }
+        }
+
+        List<Exercise> exercises2 = new ArrayList<>();
+        for(int j = i; j < i+2; j++){
+            exercise = exerciseDataSrc.createExercise("Exercise" + Integer.toString(j), "desc");
+            if(exercise != null){
+                exercises2.add(exercise);
+            }
+        }
+
+        workoutDataSrc.createWorkout("Heavy liftin", exercises1);
+        workoutDataSrc.createWorkout("Running", exercises2);
 
     }
 
@@ -44,27 +66,25 @@ public class BaseActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
         allBtn = new ArrayList<>();
 
-        for (int i = 0; i<workouts.size(); i++) {
-            ListView list = new ListView(this);
-            list.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
-            //LinearLayout row = new LinearLayout(this);
-            //row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        for (int i = 0; i < workouts.size(); i++) {
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             // Add button in layout with correct parameters and set onClick to start new intent
-            Button btnTag = new Button(this);
-            btnTag.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
-            btnTag.setText(workouts.get(i).getName());
-            btnTag.setId(i);
-            btnTag.setOnClickListener(new View.OnClickListener() {
+            Button workoutBtn = new Button(this);
+            workoutBtn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            workoutBtn.setText(workouts.get(i).getName());
+            workoutBtn.setId(i);
+            workoutBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startWorkoutActivity(v);
                 }
             });
-            allBtn.add(btnTag);
-            list.addHeaderView(btnTag);
+            allBtn.add(workoutBtn);
+            row.addView(workoutBtn);
 
-            layout.addView(list);
+            layout.addView(row);
         }
 
 

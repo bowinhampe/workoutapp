@@ -9,7 +9,6 @@ import java.util.List;
 public class Workout {
     private long id;
     private String name;
-    //private WorkoutExercise;
     private List<Exercise> exercises;
 
     public long getId() {

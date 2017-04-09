@@ -17,18 +17,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Tables
     public static final String TABLE_WORKOUTS = "Workouts";
-    public static final String WORKOUTS_COLUMN_ID = "Id";
-    public static final String WORKOUTS_COLUMN_NAME = "Name";
+    public static final String WORKOUTS_COLUMN_ID = "id";
+    public static final String WORKOUTS_COLUMN_NAME = "name";
 
     public static final String TABLE_EXERCISES = "Exercises";
-    public static final String EXERCISES_COLUMN_ID = "Id";
-    public static final String EXERCISES_COLUMN_NAME = "Name";
-    public static final String EXERCISES_COLUMN_DESCRIPTION = "Description";
+    public static final String EXERCISES_COLUMN_ID = "id";
+    public static final String EXERCISES_COLUMN_NAME = "name";
+    public static final String EXERCISES_COLUMN_DESCRIPTION = "description";
 
     public static final String TABLE_WORKOUTEXERCISES = "WorkoutExercises";
-    public static final String WORKOUTEXERCISES_COLUMN_ID = "Id";
-    public static final String WORKOUTEXERCISES_COLUMN_WORKOUTID = "WorkoutId";
-    public static final String WORKOUTEXERCISES_COLUMN_EXERCISEID = "ExerciseId";
+    public static final String WORKOUTEXERCISES_COLUMN_ID = "id";
+    public static final String WORKOUTEXERCISES_COLUMN_WORKOUTID = "workout_id";
+    public static final String WORKOUTEXERCISES_COLUMN_EXERCISEID = "exercise_id";
 
     // Sql statement used when creating database
     private static final String CREATE_TABLE_WORKOUTS = "create table " + TABLE_WORKOUTS + "("
@@ -44,8 +44,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_WORKOUTEXERCISES = "create table " + TABLE_WORKOUTEXERCISES + "("
             + WORKOUTEXERCISES_COLUMN_ID            + " integer primary key autoincrement, "
-            + WORKOUTEXERCISES_COLUMN_WORKOUTID     + " integer not null    unique, "
-            + WORKOUTEXERCISES_COLUMN_EXERCISEID    + " integer, "
+            + WORKOUTEXERCISES_COLUMN_WORKOUTID     + " integer not null, "
+            + WORKOUTEXERCISES_COLUMN_EXERCISEID    + " integer not null, "
             + "foreign key(" + WORKOUTEXERCISES_COLUMN_WORKOUTID + ") " + "references " + TABLE_WORKOUTS + "(" + WORKOUTS_COLUMN_ID + "), "
             + "foreign key(" + WORKOUTEXERCISES_COLUMN_EXERCISEID + ") " + "references " + TABLE_EXERCISES + "(" + EXERCISES_COLUMN_ID + ")"
             + ");";
