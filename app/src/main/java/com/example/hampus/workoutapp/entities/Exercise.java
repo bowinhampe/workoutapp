@@ -1,4 +1,4 @@
-package com.example.hampus.workoutapp;
+package com.example.hampus.workoutapp.entities;
 
 /**
  * Created by Daniel on 4/7/2017.

@@ -10,12 +10,12 @@ import com.example.hampus.workoutapp.database.DatabaseHandler;
  * Created by Daniel on 4/8/2017.
  */
 
-public abstract class DataSource {
+public abstract class DAO {
     public SQLiteDatabase db;
     public DatabaseHandler dbHandler;
     private String[] columns;
 
-    public DataSource(Context context) {
+    public DAO(Context context) {
         this.dbHandler = new DatabaseHandler(context);
     }
 

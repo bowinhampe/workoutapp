@@ -1,4 +1,4 @@
-package com.example.hampus.workoutapp;
+package com.example.hampus.workoutapp.entities;
 
 import java.util.List;
 

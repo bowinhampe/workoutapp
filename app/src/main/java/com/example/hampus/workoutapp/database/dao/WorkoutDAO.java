@@ -4,26 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.example.hampus.workoutapp.Exercise;
-import com.example.hampus.workoutapp.Workout;
+import com.example.hampus.workoutapp.entities.Exercise;
+import com.example.hampus.workoutapp.entities.Workout;
 import com.example.hampus.workoutapp.database.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Exchanger;
 
 /**
  * Created by Daniel on 4/7/2017.
  */
 
-public class WorkoutDataSource extends DataSource {
-
-    /*private static final String QUERY_WORKOUT_NAMES = "select " + DatabaseHandler.WORKOUTS_COLUMN_ID + ", "
-            + DatabaseHandler.WORKOUTS_COLUMN_NAME
-            + " from " + DatabaseHandler.TABLE_WORKOUTS;*/
+public class WorkoutDAO extends DAO {
 
     private static final String QUERY_WORKOUT = "select " + DatabaseHandler.TABLE_WORKOUTS + ".*, "
             + DatabaseHandler.TABLE_WORKOUTEXERCISES + "." + DatabaseHandler.WORKOUTEXERCISES_COLUMN_EXERCISEID + ", "
@@ -37,7 +30,7 @@ public class WorkoutDataSource extends DataSource {
             + " inner join " + DatabaseHandler.TABLE_EXERCISES
             + " on " + DatabaseHandler.TABLE_WORKOUTEXERCISES + "." + DatabaseHandler.WORKOUTEXERCISES_COLUMN_EXERCISEID + " = " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_ID;
 
-    public WorkoutDataSource(Context context) {
+    public WorkoutDAO(Context context) {
         super(context);
         this.dbHandler = new DatabaseHandler(context);
 
@@ -65,7 +58,7 @@ public class WorkoutDataSource extends DataSource {
                 values);
 
         if (exercises != null) {
-            for (Exercise exercise: exercises) {
+            for (Exercise exercise : exercises) {
                 values = new ContentValues();
                 values.put(DatabaseHandler.WORKOUTEXERCISES_COLUMN_WORKOUTID, workoutId);
                 values.put(DatabaseHandler.WORKOUTEXERCISES_COLUMN_EXERCISEID, exercise.getId());
@@ -74,7 +67,7 @@ public class WorkoutDataSource extends DataSource {
             }
         }
 
-        String query = WorkoutDataSource.QUERY_WORKOUT + " where " + DatabaseHandler.TABLE_WORKOUTS + "." + DatabaseHandler.WORKOUTS_COLUMN_ID + " = '" + workoutId + "'";
+        String query = WorkoutDAO.QUERY_WORKOUT + " where " + DatabaseHandler.TABLE_WORKOUTS + "." + DatabaseHandler.WORKOUTS_COLUMN_ID + " = '" + workoutId + "'";
         Cursor cursor = this.getDb().rawQuery(query, null);
         cursor.moveToFirst();
         Workout workout = this.cursorToWorkout(cursor);
@@ -92,7 +85,7 @@ public class WorkoutDataSource extends DataSource {
     public List<Workout> getAllWorkouts() {
         List<Workout> workouts = new ArrayList<>();
 
-        Cursor cursor = this.getDb().rawQuery(WorkoutDataSource.QUERY_WORKOUT, null);
+        Cursor cursor = this.getDb().rawQuery(WorkoutDAO.QUERY_WORKOUT, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -112,7 +105,6 @@ public class WorkoutDataSource extends DataSource {
         Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_WORKOUTS,
                 this.getColumns(), null, null, null, null, null);
 
-        //Cursor cursor = this.getDb().rawQuery(WorkoutDataSource.QUERY_WORKOUT_NAMES, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Workout workout = cursorToWorkoutOnlyNames(cursor);
@@ -126,7 +118,7 @@ public class WorkoutDataSource extends DataSource {
     }
 
     public Workout getWorkout(long id) {
-        String query = WorkoutDataSource.QUERY_WORKOUT + " where " + DatabaseHandler.TABLE_WORKOUTS + "." + DatabaseHandler.WORKOUTS_COLUMN_ID + " = '" + id + "'";
+        String query = WorkoutDAO.QUERY_WORKOUT + " where " + DatabaseHandler.TABLE_WORKOUTS + "." + DatabaseHandler.WORKOUTS_COLUMN_ID + " = '" + id + "'";
         Cursor cursor = this.getDb().rawQuery(query, null);
         cursor.moveToFirst();
         Workout workout = cursorToWorkout(cursor);
@@ -138,8 +130,7 @@ public class WorkoutDataSource extends DataSource {
 
     private Workout cursorToWorkout(Cursor cursor) {
         Workout workout = null;
-        //Workout workout = new Workout();
-        //try {
+
         if (!cursor.isAfterLast()) {
             workout = new Workout();
 
@@ -163,11 +154,8 @@ public class WorkoutDataSource extends DataSource {
             cursor.moveToPrevious();
 
             workout.setExercises(exercises);
-        /*}
-        catch (Exception e){
-            e.printStackTrace();
-        }*/
         }
+
         return workout;
     }
 
@@ -182,5 +170,4 @@ public class WorkoutDataSource extends DataSource {
 
         return workout;
     }
-
 }

@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
+import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
+import com.example.hampus.workoutapp.entities.Exercise;
+import com.example.hampus.workoutapp.entities.Workout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutActivity extends ListActivity {
-    private WorkoutDataSource workoutDataSrc;
-    private String workoutName;
+    private WorkoutDAO workoutDAO;
+    private long workoutId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,41 +23,42 @@ public class WorkoutActivity extends ListActivity {
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                workoutName= null;
+            if (extras == null) {
+                workoutId = -1;
             } else {
-                workoutName= extras.getString("WorkoutName");
+                workoutId = extras.getLong("WorkoutId");
             }
         } else {
-            workoutName= (String) savedInstanceState.getSerializable("WorkoutName");
+            workoutId = savedInstanceState.getLong("WorkoutId");
         }
-        Log.d("DEBUG",workoutName);
+        Log.d("DEBUG", Long.toString(workoutId));
         this.initiateDB();
     }
 
-    private void initiateDB(){
+    private void initiateDB() {
         // TODO: Get Workout Exercises depending on workoutName
-        this.workoutDataSrc = new WorkoutDataSource(this);
-        this.workoutDataSrc.open();
+        this.workoutDAO = new WorkoutDAO(this);
+        this.workoutDAO.open();
 
-        Workout workout = this.workoutDataSrc.getWorkout(this.workoutName);
+        Workout workout = this.workoutDAO.getWorkout(this.workoutId);
 
         List<String> exerciseNames = new ArrayList<>();
-        for (Exercise e: workout.getExercises())
+        for (Exercise e : workout.getExercises())
             exerciseNames.add(e.getName());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         setListAdapter(adapter);
     }
+
     @Override
     protected void onResume() {
-        this.workoutDataSrc.open();
+        this.workoutDAO.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        this.workoutDataSrc.close();
+        this.workoutDAO.close();
         super.onPause();
     }
 }

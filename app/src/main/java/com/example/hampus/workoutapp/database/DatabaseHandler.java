@@ -34,22 +34,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Sql statement used when creating database
     private static final String CREATE_TABLE_WORKOUTS = "create table " + TABLE_WORKOUTS + "("
-            + WORKOUTS_COLUMN_ID    + " integer primary key autoincrement, "
-            + WORKOUTS_COLUMN_NAME  + " text    not null"
+            + WORKOUTS_COLUMN_ID + " integer primary key autoincrement, "
+            + WORKOUTS_COLUMN_NAME + " text    not null"
             + ");";
 
     private static final String CREATE_TABLE_EXERCISES = "create table " + TABLE_EXERCISES + "("
-            + EXERCISES_COLUMN_ID           + " integer primary key autoincrement, "
-            + EXERCISES_COLUMN_NAME         + " text    not null    unique, "
-            + EXERCISES_COLUMN_CATEGORY     + " text    not null, "
-            + EXERCISES_COLUMN_MUSCLEGROUP  + " text, "
-            + EXERCISES_COLUMN_DESCRIPTION  + " text"
+            + EXERCISES_COLUMN_ID + " integer primary key autoincrement, "
+            + EXERCISES_COLUMN_NAME + " text    not null    unique, "
+            + EXERCISES_COLUMN_CATEGORY + " text    not null, "
+            + EXERCISES_COLUMN_MUSCLEGROUP + " text, "
+            + EXERCISES_COLUMN_DESCRIPTION + " text"
             + ");";
 
     private static final String CREATE_TABLE_WORKOUTEXERCISES = "create table " + TABLE_WORKOUTEXERCISES + "("
-            + WORKOUTEXERCISES_COLUMN_ID            + " integer primary key autoincrement, "
-            + WORKOUTEXERCISES_COLUMN_WORKOUTID     + " integer not null, "
-            + WORKOUTEXERCISES_COLUMN_EXERCISEID    + " integer not null, "
+            + WORKOUTEXERCISES_COLUMN_ID + " integer primary key autoincrement, "
+            + WORKOUTEXERCISES_COLUMN_WORKOUTID + " integer not null, "
+            + WORKOUTEXERCISES_COLUMN_EXERCISEID + " integer not null, "
             + "foreign key(" + WORKOUTEXERCISES_COLUMN_WORKOUTID + ") " + "references " + TABLE_WORKOUTS + "(" + WORKOUTS_COLUMN_ID + "), "
             + "foreign key(" + WORKOUTEXERCISES_COLUMN_EXERCISEID + ") " + "references " + TABLE_EXERCISES + "(" + EXERCISES_COLUMN_ID + ")"
             + ");";

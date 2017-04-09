@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.example.hampus.workoutapp.database.DatabaseHandler;
-import com.example.hampus.workoutapp.Exercise;
+import com.example.hampus.workoutapp.entities.Exercise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +14,16 @@ import java.util.List;
  * Created by Daniel on 4/7/2017.
  */
 
-public class ExerciseDataSource extends DataSource{
+public class ExerciseDAO extends DAO {
 
-    public ExerciseDataSource(Context context) {
+    public ExerciseDAO(Context context) {
         super(context);
 
-        String[] columns = { DatabaseHandler.EXERCISES_COLUMN_ID,
+        String[] columns = {DatabaseHandler.EXERCISES_COLUMN_ID,
                 DatabaseHandler.EXERCISES_COLUMN_NAME,
                 DatabaseHandler.EXERCISES_COLUMN_CATEGORY,
                 DatabaseHandler.EXERCISES_COLUMN_MUSCLEGROUP,
-                DatabaseHandler.EXERCISES_COLUMN_DESCRIPTION };
+                DatabaseHandler.EXERCISES_COLUMN_DESCRIPTION};
         this.setColumns(columns);
     }
 

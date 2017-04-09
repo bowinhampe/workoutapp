@@ -17,8 +17,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         initiateScrollViewExercises();
     }
 
-    private void initiateScrollViewExercises(){
-        RelativeLayout rl=(RelativeLayout)findViewById(R.id.relative_scroll_createworkout);
+    private void initiateScrollViewExercises() {
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.relative_scroll_createworkout);
 
         ScrollView sv = new ScrollView(this);
         sv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
@@ -27,10 +27,9 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         ll.setOrientation(LinearLayout.VERTICAL);
         sv.addView(ll);
 
-        for(int i = 0; i < 20; i++)
-        {
+        for (int i = 0; i < 20; i++) {
             TextView b = new TextView(this);
-            b.setText("Exercise nr "+i);
+            b.setText("Exercise nr " + i);
             ll.addView(b);
         }
 
