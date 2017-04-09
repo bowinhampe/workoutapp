@@ -23,12 +23,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String TABLE_EXERCISES = "Exercises";
     public static final String EXERCISES_COLUMN_ID = "id";
     public static final String EXERCISES_COLUMN_NAME = "name";
+    public static final String EXERCISES_COLUMN_CATEGORY = "category";
+    public static final String EXERCISES_COLUMN_MUSCLEGROUP = "muscleGroup";
     public static final String EXERCISES_COLUMN_DESCRIPTION = "description";
 
     public static final String TABLE_WORKOUTEXERCISES = "WorkoutExercises";
     public static final String WORKOUTEXERCISES_COLUMN_ID = "id";
-    public static final String WORKOUTEXERCISES_COLUMN_WORKOUTID = "workout_id";
-    public static final String WORKOUTEXERCISES_COLUMN_EXERCISEID = "exercise_id";
+    public static final String WORKOUTEXERCISES_COLUMN_WORKOUTID = "workoutId";
+    public static final String WORKOUTEXERCISES_COLUMN_EXERCISEID = "exerciseId";
 
     // Sql statement used when creating database
     private static final String CREATE_TABLE_WORKOUTS = "create table " + TABLE_WORKOUTS + "("
@@ -39,6 +41,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_EXERCISES = "create table " + TABLE_EXERCISES + "("
             + EXERCISES_COLUMN_ID           + " integer primary key autoincrement, "
             + EXERCISES_COLUMN_NAME         + " text    not null    unique, "
+            + EXERCISES_COLUMN_CATEGORY     + " text    not null, "
+            + EXERCISES_COLUMN_MUSCLEGROUP  + " text, "
             + EXERCISES_COLUMN_DESCRIPTION  + " text"
             + ");";
 

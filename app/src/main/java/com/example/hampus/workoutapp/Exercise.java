@@ -7,6 +7,8 @@ package com.example.hampus.workoutapp;
 public class Exercise {
     private long id;
     private String name;
+    private String category;
+    private String muscleGroup;
     private String description;
 
     public long getId() {
@@ -23,6 +25,22 @@ public class Exercise {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getMuscleGroup() {
+        return muscleGroup;
+    }
+
+    public void setMuscleGroup(String muscleGroup) {
+        this.muscleGroup = muscleGroup;
     }
 
     public String getDescription() {
