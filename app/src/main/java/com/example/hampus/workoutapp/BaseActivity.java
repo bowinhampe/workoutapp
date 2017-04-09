@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.example.hampus.workoutapp.database.dao.WorkoutDataSource;
 
@@ -44,12 +45,14 @@ public class BaseActivity extends AppCompatActivity {
         allBtn = new ArrayList<>();
 
         for (int i = 0; i<workouts.size(); i++) {
-            LinearLayout row = new LinearLayout(this);
-            row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            ListView list = new ListView(this);
+            list.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
+            //LinearLayout row = new LinearLayout(this);
+            //row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             // Add button in layout with correct parameters and set onClick to start new intent
             Button btnTag = new Button(this);
-            btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            btnTag.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
             btnTag.setText(workouts.get(i).getName());
             btnTag.setId(i);
             btnTag.setOnClickListener(new View.OnClickListener() {
@@ -59,9 +62,9 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
             allBtn.add(btnTag);
-            row.addView(btnTag);
+            list.addHeaderView(btnTag);
 
-            layout.addView(row);
+            layout.addView(list);
         }
 
 

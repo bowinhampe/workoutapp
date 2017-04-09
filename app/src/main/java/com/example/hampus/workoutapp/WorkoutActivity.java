@@ -34,6 +34,7 @@ public class WorkoutActivity extends ListActivity {
     }
 
     private void initiateDB(){
+        // TODO: Get Workout Exercises depending on workoutName
         this.workoutDataSrc = new WorkoutDataSource(this);
         this.workoutDataSrc.open();
 
