@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hampus.workoutapp.CreateWorkoutActivity">
+<RelativeLayout
+    android:layout_width="368dp"
+    android:layout_height="495dp"
+    android:background="@mipmap/background">
+
+    <TextView
+        android:id="@+id/create_workout_textview_name"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/workout_name_activity_createworkout"/>
+
+    <EditText
+        android:id="@+id/create_workout_editText_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chestday . . . "
+        android:layout_alignBaseline="@+id/create_workout_textview_name"
+        android:layout_alignBottom="@+id/create_workout_textview_name"
+        android:layout_toEndOf="@+id/create_workout_textview_name" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_exercise_activity_createworkout"
+        android:textSize="20sp"
+        android:id="@+id/create_workout_textView_exercises"
+        android:layout_below="@id/create_workout_editText_name" />
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/create_workout_textView_exercises"
+        android:id="@+id/relative_scroll_createworkout">
+
+    </RelativeLayout>
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/add"
+        android:layout_alignBaseline="@id/create_workout_textView_exercises"
+        android:layout_toEndOf="@id/create_workout_textView_exercises"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/create_workout_button_add"
+        >
+
+    </Button>
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/delete"
+        android:layout_alignBaseline="@id/create_workout_textView_exercises"
+        android:layout_toEndOf="@id/create_workout_button_add"
+        >
+    </Button>
+
+</RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

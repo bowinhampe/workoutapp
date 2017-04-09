@@ -3,4 +3,8 @@
     <string name="btn_workout">Workouts</string>
     <string name="title_activity_workout">WorkoutActivity</string>
     <string name="your_workouts_activity_base">All workouts</string>
+    <string name="create_workout_activity_base">Create Workout Schedule</string>
+    <string name="workout_name_activity_createworkout">Name of workout</string>
+    <string name="add_exercise_activity_createworkout">Exercises</string>
+    <string name="create_new_exercise_activity_createworkout">Create new exercise</string>
 </resources>

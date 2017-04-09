@@ -66,6 +66,16 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initiateBtns(){
+        // Initiate Create Workout button
+        Button createWorkout = (Button) findViewById(R.id.base_activity_createworkout_button);
+        createWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCreateWorkoutActivity(v);
+            }
+        });
+
+        // Initiate all workout buttons
         List<Workout> workouts = this.workoutDataSrc.getAllWorkouts();
         layout = (LinearLayout) findViewById(R.id.linear_layout_base);
         layout.setOrientation(LinearLayout.VERTICAL);  //Can also be done in xml by android:orientation="vertical"
@@ -81,6 +91,7 @@ public class BaseActivity extends AppCompatActivity {
             workoutBtn.setLayoutParams(new LinearLayout.LayoutParams(500, LinearLayout.LayoutParams.WRAP_CONTENT));
             workoutBtn.setText(workouts.get(i).getName());
             workoutBtn.setId(i);
+            workoutBtn.setAllCaps(false);
             workoutBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,6 +134,10 @@ public class BaseActivity extends AppCompatActivity {
         String btnName = allBtn.get(btnID).getText().toString();
         Intent intent = new Intent(this, WorkoutActivity.class);
         intent.putExtra("WorkoutName",btnName);
+        startActivity(intent);
+    }
+    public void startCreateWorkoutActivity(View view){
+        Intent intent = new Intent(this, CreateWorkoutActivity.class);
         startActivity(intent);
     }
 }
