@@ -21,13 +21,17 @@ public class ExerciseDataSource extends DataSource{
 
         String[] columns = { DatabaseHandler.EXERCISES_COLUMN_ID,
                 DatabaseHandler.EXERCISES_COLUMN_NAME,
+                DatabaseHandler.EXERCISES_COLUMN_CATEGORY,
+                DatabaseHandler.EXERCISES_COLUMN_MUSCLEGROUP,
                 DatabaseHandler.EXERCISES_COLUMN_DESCRIPTION };
         this.setColumns(columns);
     }
 
-    public Exercise createExercise(String name, String description) {
+    public Exercise createExercise(String name, String category, String muscleGroup, String description) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHandler.EXERCISES_COLUMN_NAME, name);
+        values.put(DatabaseHandler.EXERCISES_COLUMN_CATEGORY, category);
+        values.put(DatabaseHandler.EXERCISES_COLUMN_MUSCLEGROUP, muscleGroup);
         values.put(DatabaseHandler.EXERCISES_COLUMN_DESCRIPTION, description);
 
         long insertId = this.getDb().insert(DatabaseHandler.TABLE_EXERCISES, null,
@@ -70,10 +74,17 @@ public class ExerciseDataSource extends DataSource{
     }
 
     private Exercise cursorToExercise(Cursor cursor) {
-        Exercise exercise = new Exercise();
-        exercise.setId(cursor.getLong(0));
-        exercise.setName(cursor.getString(1));
-        exercise.setDescription(cursor.getString(2));
+        Exercise exercise = null;
+
+        if (!cursor.isAfterLast()) {
+            exercise = new Exercise();
+            exercise.setId(cursor.getLong(0));
+            exercise.setName(cursor.getString(1));
+            exercise.setCategory(cursor.getString(2));
+            exercise.setMuscleGroup(cursor.getString(3));
+            exercise.setDescription(cursor.getString(4));
+        }
+
         return exercise;
     }
 }
