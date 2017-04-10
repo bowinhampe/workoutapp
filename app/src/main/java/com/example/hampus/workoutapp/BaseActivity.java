@@ -3,6 +3,9 @@ package com.example.hampus.workoutapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,6 +32,32 @@ public class BaseActivity extends AppCompatActivity {
 
         initiateDB();
         initiateBtns();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_create_workout:
+                Intent intent = new Intent(this, CreateWorkoutActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_developer_options:
+                // TODO: add;
+                return true;
+            case R.id.menu_graphs:
+                // TODO: add;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initiateDB() {
@@ -62,14 +91,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initiateBtns() {
-        // Initiate Create Workout button
-        Button createWorkout = (Button) findViewById(R.id.base_activity_createworkout_button);
-        createWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startCreateWorkoutActivity(v);
-            }
-        });
 
         // Initiate all workout buttons
         this.workoutNames = this.workoutDAO.getAllWorkoutNames();
@@ -140,8 +161,4 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void startCreateWorkoutActivity(View view) {
-        Intent intent = new Intent(this, CreateWorkoutActivity.class);
-        startActivity(intent);
-    }
 }

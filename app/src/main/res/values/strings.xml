@@ -7,4 +7,7 @@
     <string name="workout_name_activity_createworkout">Name of workout</string>
     <string name="add_exercise_activity_createworkout">Exercises</string>
     <string name="create_new_exercise_activity_createworkout">Create new exercise</string>
+    <string name="menu_create_workout_text">Create Workout Schedule</string>
+    <string name="menu_graphs">Show Graphs</string>
+    <string name="menu_developer_options">Developer Options</string>
 </resources>

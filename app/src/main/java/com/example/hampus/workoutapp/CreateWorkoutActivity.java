@@ -1,7 +1,11 @@
 package com.example.hampus.workoutapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,32 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_workout);
         initiateView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_create_workout:
+                Toast toast = new Toast(this);
+                toast.makeText(this, "Already in Create Workout!",Toast.LENGTH_LONG);
+                return true;
+            case R.id.menu_developer_options:
+                // TODO: add;
+                return true;
+            case R.id.menu_graphs:
+                // TODO: add;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initiateView() {
@@ -93,12 +124,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(spinnerArrayAdapter);
-            spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // TODO: Set on click listener on each item and return the value that was chosen to be added in scrollViewExercises
-                }
-            });
+            // TODO: LISTENER
             // TODO: Make this set by Category
             spinnerHeader.setText("Category: "+i);
             spinnerHeader.setTextSize(20);

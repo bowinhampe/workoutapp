@@ -1,9 +1,14 @@
 package com.example.hampus.workoutapp;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
 import com.example.hampus.workoutapp.entities.Exercise;
@@ -35,6 +40,31 @@ public class WorkoutActivity extends ListActivity {
         this.initiateDB();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_create_workout:
+                Intent intent = new Intent(this, CreateWorkoutActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_developer_options:
+                // TODO: add;
+                return true;
+            case R.id.menu_graphs:
+                // TODO: add;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void initiateDB() {
         // TODO: Get Workout Exercises depending on workoutName
         this.workoutDAO = new WorkoutDAO(this);

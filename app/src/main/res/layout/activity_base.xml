@@ -10,21 +10,16 @@
     <LinearLayout
         android:background="@mipmap/background"
         android:id="@+id/linear_layout_base"
-        android:layout_width="368dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/base_activity_createworkout_button"
-            android:textAllCaps="false"
-            android:text="@string/create_workout_activity_base">
 
-        </Button>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/your_workouts_activity_base"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:textSize="30sp"/>
 
     </LinearLayout>
