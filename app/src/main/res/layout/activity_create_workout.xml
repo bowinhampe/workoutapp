@@ -8,7 +8,8 @@
 <RelativeLayout
     android:layout_width="368dp"
     android:layout_height="495dp"
-    android:background="@mipmap/background">
+    android:background="@mipmap/background"
+    android:id="@+id/create_workout_base_rl">
 
     <TextView
         android:id="@+id/create_workout_textview_name"
@@ -56,6 +57,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@mipmap/delete"
+        android:id="@+id/create_workout_button_remove"
         android:layout_alignBaseline="@id/create_workout_textView_exercises"
         android:layout_toEndOf="@id/create_workout_button_add"
         >
