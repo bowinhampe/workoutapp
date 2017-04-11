@@ -91,9 +91,10 @@ public class ExerciseDAO extends DAO {
     public Exercise getExerciseByName(String name) {
         Exercise exercise = null;
 
-        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.EXERCISES_COLUMN_NAME + " = " + name, null);
+        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES+"."+DatabaseHandler.EXERCISES_COLUMN_NAME + " = " +"\""+name+"\"", null);
 
-        if (!cursor.isAfterLast()) {
+        cursor.moveToFirst();
+        if (cursor.getCount()>0) {
             exercise = cursorToExercise(cursor);
         }
 

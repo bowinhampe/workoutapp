@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.hampus.workoutapp.database.dao.ExerciseDAO;
 import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
 import com.example.hampus.workoutapp.entities.Exercise;
+import com.example.hampus.workoutapp.entities.Workout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     private EditText workoutNameEdit;
     private Button addExerciseBtn;
     private Button removeExerciseBtn;
+    private Button doneCreatingBtn;
     private ArrayList<String> categorys;
     private ArrayList<String> exercises;
     private LinearLayout llScrollView;
@@ -101,7 +103,19 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         workoutNameEdit = (EditText) findViewById(R.id.create_workout_editText_name);
         addExerciseBtn = (Button) findViewById(R.id.create_workout_button_add);
         removeExerciseBtn = (Button) findViewById(R.id.create_workout_button_remove);
+        doneCreatingBtn = (Button) findViewById(R.id.create_workout_button_done);
 
+        doneCreatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create workout and exit mode
+                if(mExercisesToAdd.size()!=0) {
+                    Workout wkout = workoutDB.createWorkout(workoutNameEdit.getText().toString(), mExercisesToAdd);
+                }
+                Intent intent = new Intent(getBaseContext(), BaseActivity.class);
+                startActivity(intent);
+            }
+        });
         addExerciseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,8 +258,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         llScrollView.setVisibility(View.INVISIBLE);
 
-        // TODO Exercise toAdd = exerciseDB.getExerciseByName(exerciseToAdd);
-        //mExercisesToAdd.add(toAdd);
+        Exercise toAdd = exerciseDB.getExerciseByName(exerciseToAdd);
+        mExercisesToAdd.add(toAdd);
 
 
     }

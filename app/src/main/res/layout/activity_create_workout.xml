@@ -68,6 +68,16 @@
                 >
             </Button>
 
+            <Button
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:text="DONE"
+                android:id="@+id/create_workout_button_done"
+                android:layout_alignParentRight="true"
+                >
+
+            </Button>
+
         </RelativeLayout>
 
 
