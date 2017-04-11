@@ -37,17 +37,19 @@ public class ExerciseDAO extends DAO {
         long insertId = this.getDb().insert(DatabaseHandler.TABLE_EXERCISES, null,
                 values);
 
-        Exercise newExercise = null;
+        Exercise exercise = null;
         if (insertId != -1) {
             Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_EXERCISES,
                     this.getColumns(), DatabaseHandler.EXERCISES_COLUMN_ID + " = " + insertId, null,
                     null, null, null);
             cursor.moveToFirst();
-            newExercise = cursorToExercise(cursor);
+            if (!cursor.isAfterLast()) {
+                exercise = cursorToExercise(cursor);
+            }
             cursor.close();
         }
 
-        return newExercise;
+        return exercise;
     }
 
     public void deleteExercise(Exercise exercise) {
@@ -61,71 +63,67 @@ public class ExerciseDAO extends DAO {
 
         Cursor cursor = this.getDb().query(DatabaseHandler.TABLE_EXERCISES,
                 this.getColumns(), null, null, null, null, null);
-
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Exercise exercise = cursorToExercise(cursor);
             exercises.add(exercise);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
+
         return exercises;
-    }
-
-    private Exercise cursorToExercise(Cursor cursor) {
-        Exercise exercise = null;
-
-        if (!cursor.isAfterLast()) {
-            exercise = new Exercise();
-            exercise.setId(cursor.getLong(0));
-            exercise.setName(cursor.getString(1));
-            exercise.setCategory(cursor.getString(2));
-            exercise.setMuscleGroup(cursor.getString(3));
-            exercise.setDescription(cursor.getString(4));
-        }
-
-        return exercise;
     }
 
     public Exercise getExerciseByName(String name) {
         Exercise exercise = null;
 
-        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES+"."+DatabaseHandler.EXERCISES_COLUMN_NAME + " = " +"\""+name+"\"", null);
-
+        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_NAME + " = '" + name + "'", null);
         cursor.moveToFirst();
-        if (cursor.getCount()>0) {
+        if (!cursor.isAfterLast()) {
             exercise = cursorToExercise(cursor);
         }
 
         return exercise;
     }
 
-    public ArrayList<String> getAllCategorys(){
-        Cursor c = db.rawQuery("SELECT DISTINCT "+DatabaseHandler.EXERCISES_COLUMN_CATEGORY+" FROM "+DatabaseHandler.TABLE_EXERCISES, null);
-        ArrayList<String> allValues = new ArrayList<>();
-        try {
-            while(c.moveToNext()){
-                allValues.add(c.getString(c.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_CATEGORY)));
-            }
-        } finally {
-            c.close();
-        }
-        return allValues;
-    }
-    public ArrayList<String> getAllExerciseByCategory(String category){
-        String query = "SELECT "+DatabaseHandler.EXERCISES_COLUMN_NAME+" FROM "+DatabaseHandler.TABLE_EXERCISES+" WHERE "+DatabaseHandler.TABLE_EXERCISES+"."+DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " = "+"\""+category+"\"";
-        Cursor c = db.rawQuery(query, null);
-        ArrayList<String> allValues = new ArrayList<>();
-        try {
-            while(c.moveToNext()){
-                // TODO: return Exercise instead to show description etc?
-                allValues.add(c.getString(c.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_NAME)));
-            }
-        } finally {
-            c.close();
-        }
-        return allValues;
+    public ArrayList<String> getAllCategories() {
+        ArrayList<String> categories = new ArrayList<>();
 
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " FROM " + DatabaseHandler.TABLE_EXERCISES, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            categories.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_CATEGORY)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return categories;
+    }
+
+    public ArrayList<String> getAllExerciseNamesByCategory(String category) {
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        String query = "SELECT " + DatabaseHandler.EXERCISES_COLUMN_NAME + " FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " = '" + category + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            // TODO: return Exercise instead to show description etc?
+            exerciseNames.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_NAME)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return exerciseNames;
+    }
+
+    private Exercise cursorToExercise(Cursor cursor) {
+        Exercise exercise = new Exercise();
+        exercise.setId(cursor.getLong(0));
+        exercise.setName(cursor.getString(1));
+        exercise.setCategory(cursor.getString(2));
+        exercise.setMuscleGroup(cursor.getString(3));
+        exercise.setDescription(cursor.getString(4));
+
+        return exercise;
     }
 }
