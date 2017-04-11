@@ -50,6 +50,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     private TextView mSpinnerHeaderExercise;
     private List<Exercise> mExercisesToAdd;
     private boolean firstLoad = true;
+    private boolean mCreateWorkoutOK=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create workout and exit mode
-                if(mExercisesToAdd.size()!=0) {
+                if(mCreateWorkoutOK) {
                     Workout wkout = workoutDB.createWorkout(workoutNameEdit.getText().toString(), mExercisesToAdd);
                 }
                 Intent intent = new Intent(getBaseContext(), BaseActivity.class);
@@ -260,6 +261,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         Exercise toAdd = exerciseDB.getExerciseByName(exerciseToAdd);
         mExercisesToAdd.add(toAdd);
+        mCreateWorkoutOK=true;
+        Log.d("test","WTF MANM");
 
 
     }
