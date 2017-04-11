@@ -16,6 +16,10 @@ import java.util.List;
 
 public class ExerciseDAO extends DAO {
 
+    private static final String QUERY_SELECT_EXERCISES = "SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES;
+    private static final String QUERY_SELECT_CATEGORIES = "SELECT DISTINCT " + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " FROM " + DatabaseHandler.TABLE_EXERCISES;
+    private static final String QUERY_SELECT_NAMES = "SELECT " + DatabaseHandler.EXERCISES_COLUMN_NAME + " FROM " + DatabaseHandler.TABLE_EXERCISES;
+
     public ExerciseDAO(Context context) {
         super(context);
 
@@ -77,7 +81,7 @@ public class ExerciseDAO extends DAO {
     public Exercise getExerciseByName(String name) {
         Exercise exercise = null;
 
-        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_NAME + " = '" + name + "'", null);
+        Cursor cursor = this.getDb().rawQuery(ExerciseDAO.QUERY_SELECT_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_NAME + " = '" + name + "'", null);
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
             exercise = cursorToExercise(cursor);
@@ -89,7 +93,7 @@ public class ExerciseDAO extends DAO {
     public ArrayList<String> getAllCategories() {
         ArrayList<String> categories = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT DISTINCT " + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " FROM " + DatabaseHandler.TABLE_EXERCISES, null);
+        Cursor cursor = db.rawQuery(ExerciseDAO.QUERY_SELECT_CATEGORIES, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             categories.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_CATEGORY)));
@@ -102,9 +106,8 @@ public class ExerciseDAO extends DAO {
 
     public ArrayList<String> getAllExerciseNamesByCategory(String category) {
         ArrayList<String> exerciseNames = new ArrayList<>();
-        String query = "SELECT " + DatabaseHandler.EXERCISES_COLUMN_NAME + " FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " = '" + category + "'";
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(ExerciseDAO.QUERY_SELECT_NAMES + " WHERE " + DatabaseHandler.TABLE_EXERCISES + "." + DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " = '" + category + "'", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             // TODO: return Exercise instead to show description etc?
