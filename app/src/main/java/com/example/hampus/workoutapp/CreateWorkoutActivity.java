@@ -34,9 +34,13 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     private EditText workoutNameEdit;
     private Button addExerciseBtn;
     private Button removeExerciseBtn;
-    private ScrollView svExercisesDropDown;
-
+    private ArrayList<String> categorys;
+    private LinearLayout llScrollView;
     private ExerciseDAO exerciseDB;
+    private ScrollView mAddExercise;
+    private Spinner mCategory;
+    private Spinner mExerciseByCategory;
+    private TextView mSpinnerHeaderExercise;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,33 +118,35 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         removeExerciseBtn.setVisibility(View.INVISIBLE);
 
         // Initiate DropDowns for each type of exercises
-        ScrollView svExercisesCategoryDropDown = new ScrollView(this);
-        svExercisesCategoryDropDown.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-        LinearLayout llCat = new LinearLayout(this);
-        llCat.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-        llCat.setOrientation(LinearLayout.VERTICAL);
-        llCat.setGravity(Gravity.CENTER);
-        svExercisesCategoryDropDown.addView(llCat);
+        mAddExercise = new ScrollView(this);
+        mAddExercise.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        llScrollView = new LinearLayout(this);
+        llScrollView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+        llScrollView.setOrientation(LinearLayout.VERTICAL);
+        llScrollView.setGravity(Gravity.CENTER);
+        mAddExercise.addView(llScrollView);
+        mSpinnerHeaderExercise = new TextView(this);
 
-        ArrayList<String> categorys = exerciseDB.getAllCategorys();
+        categorys = exerciseDB.getAllCategorys();
+        mCategory = new Spinner(this);
+        Log.d(categorys.size()+": SIZEOF","cat");
+        TextView spinnerHeader = new TextView(this);
+        ArrayList<String> spinnerArray = new ArrayList<>();
         for (int i = 0; i < categorys.size(); i++) {
-            TextView spinnerHeader = new TextView(this);
-            Spinner spinner = new Spinner(this);
-            ArrayList<String> spinnerArray = new ArrayList<>();
 
             spinnerArray.add(categorys.get(i));
 
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerArrayAdapter.
-            spinner.setAdapter(spinnerArrayAdapter);
-            // TODO: LISTENER
-
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            mCategory.setAdapter(spinnerArrayAdapter);
+            mCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     // your code here
                     Log.d("DEBUG: ",id+"");
+                    // TODO: Initiate Dropdown for exercises
+                    llScrollView.removeView(mExerciseByCategory);
+                    exerciseCategorySelected(categorys.get(position));
                 }
 
                 @Override
@@ -150,45 +156,42 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
             });
             // Set spinner-name depending on category
-            spinnerHeader.setText("Category");
-            spinnerHeader.setTextSize(20);
-            spinnerHeader.setGravity(Gravity.CENTER);
-            llCat.addView(spinnerHeader);
-            llCat.addView(spinner);
+
         }
-        baseRL.addView(svExercisesDropDown);
+        // Category Header
+        spinnerHeader.setText("Category");
+        spinnerHeader.setTextSize(20);
+        spinnerHeader.setGravity(Gravity.CENTER);
+        llScrollView.addView(spinnerHeader);
+        llScrollView.addView(mCategory);
+        // Exercise Header
+        mSpinnerHeaderExercise.setText("Exercise");
+        mSpinnerHeaderExercise.setTextSize(20);
+        mSpinnerHeaderExercise.setGravity(Gravity.CENTER);
+        llScrollView.addView(mSpinnerHeaderExercise);
+        baseRL.addView(mAddExercise);
 
     }
-    public void exerciseCategorySelected(){
+    public void exerciseCategorySelected(String category){
         // Initiate DropDowns for each type of exercises
-        svExercisesDropDown= new ScrollView(this);
-        svExercisesDropDown.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-        LinearLayout ll = new LinearLayout(this);
-        ll.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-        ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setGravity(Gravity.CENTER);
-        svExercisesDropDown.addView(ll);
 
-        ArrayList<String> categorys = exerciseDB.getAllCategorys();
         ArrayList<String> exercisesByCategorys =null;
-        for (int i = 0; i < categorys.size(); i++) {
-            TextView spinnerHeader = new TextView(this);
-            Spinner spinner = new Spinner(this);
-            ArrayList<String> spinnerArray = new ArrayList<>();
+        mExerciseByCategory = new Spinner(this);
+        ArrayList<String> spinnerArray = new ArrayList<>();
 
-            // Get All exercises depending on category and add to category-defined spinner
-            exercisesByCategorys = exerciseDB.getAllExerciseByCategory(categorys.get(i));
-            if(exercisesByCategorys!=null) {
-                for (int k = 0; k < exercisesByCategorys.size(); k++) {
+        // Get All exercises depending on category and add to category-defined spinner
+        exercisesByCategorys = exerciseDB.getAllExerciseByCategory(category);
+        if(exercisesByCategorys!=null) {
+            for (int k = 0; k < exercisesByCategorys.size(); k++) {
                     spinnerArray.add(exercisesByCategorys.get(k));
                 }
             }
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerArrayAdapter);
-            // TODO: LISTENER
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mExerciseByCategory.setAdapter(spinnerArrayAdapter);
+        // TODO: LISTENER
 
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mExerciseByCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     // your code here
@@ -201,14 +204,8 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                 }
 
             });
-            // Set spinner-name depending on category
-            spinnerHeader.setText(categorys.get(i));
-            spinnerHeader.setTextSize(20);
-            spinnerHeader.setGravity(Gravity.CENTER);
-            ll.addView(spinnerHeader);
-            ll.addView(spinner);
-        }
-        baseRL.addView(svExercisesDropDown);
+        // Set spinner-name depending on category
+        llScrollView.addView(mExerciseByCategory);
     }
     public void addExerciseModeComplete(View view){
         // TODO: Make previous mode Invisible and return to base :D with exercise added to scrollview
