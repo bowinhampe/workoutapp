@@ -66,28 +66,66 @@ public class BaseActivity extends AppCompatActivity {
         this.exerciseDAO = new ExerciseDAO(this);
         this.exerciseDAO.open();
 
-        // Loading the database with data
-        List<Exercise> exercises1 = new ArrayList<>();
-        Exercise exercise;
-        int i = 0;
-        for (; i < 2; i++) {
-            exercise = exerciseDAO.createExercise("Exercise" + Integer.toString(i), "Category" + Integer.toString(i), "MuscleGroup" + Integer.toString(i), "desc");
-            if (exercise != null) {
-                exercises1.add(exercise);
-            }
+        if(workoutDAO.getAllWorkouts().size()==0) {
+            // Loading the database with data
+            List<Exercise> exercises = staticDBinitiateChest();
+            workoutDAO.createWorkout("National Chestday", exercises);
+
+            exercises = staticDBinitiateBack();
+            workoutDAO.createWorkout("Back-day", exercises);
+
+            exercises = staticDBinitiateLegs();
+            workoutDAO.createWorkout("LEGDAY!", exercises);
         }
 
-        List<Exercise> exercises2 = new ArrayList<>();
-        for (int j = i; j < i + 2; j++) {
-            exercise = exerciseDAO.createExercise("Exercise" + Integer.toString(j), "Category" + Integer.toString(j), "MuscleGroup" + Integer.toString(j), "desc");
-            if (exercise != null) {
-                exercises2.add(exercise);
+    }
+
+    private List<Exercise> staticDBinitiateChest(){
+        List<Exercise> boobs = new ArrayList<>();
+        ArrayList<Exercise> allExercise = new ArrayList<>();
+        allExercise.add(exerciseDAO.createExercise("Benchpress", "Chest", "Chest/Triceps", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Dumbbellpress", "Chest", "Chest/Triceps", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Flyers", "Chest", "Chest", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Push-ups", "Chest", "Chest/Triceps", "desc"));
+
+        for(int i=0;i<allExercise.size();i++) {
+            if (allExercise.get(i)!= null) {
+                boobs.add(allExercise.get(i));
             }
         }
+        return boobs;
+    }
 
-        workoutDAO.createWorkout("Heavy liftin", exercises1);
-        workoutDAO.createWorkout("Running", exercises2);
+    private List<Exercise> staticDBinitiateBack(){
+        List<Exercise> back = new ArrayList<>();
+        ArrayList<Exercise> allExercise = new ArrayList<>();
+        allExercise.add(exerciseDAO.createExercise("Deadlift", "Back", "Full body", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Row", "Back", "Back", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Pull-ups", "Back", "Back/Biceps", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Dumbbellrow", "Back", "Back", "desc"));
 
+        for(int i=0;i<allExercise.size();i++) {
+            if (allExercise.get(i)!= null) {
+                back.add(allExercise.get(i));
+            }
+        }
+        return back;
+    }
+
+    private List<Exercise> staticDBinitiateLegs(){
+        List<Exercise> legs = new ArrayList<>();
+        ArrayList<Exercise> allExercise = new ArrayList<>();
+        allExercise.add(exerciseDAO.createExercise("Squat", "Legs", "Full body", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Legpress", "Legs", "Legs", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Legcurl", "Legs", "Backside Legs", "desc"));
+        allExercise.add(exerciseDAO.createExercise("Legextension", "Legs", "Frontside Legs", "desc"));
+
+        for(int i=0;i<allExercise.size();i++) {
+            if (allExercise.get(i)!= null) {
+                legs.add(allExercise.get(i));
+            }
+        }
+        return legs;
     }
 
     private void initiateBtns() {

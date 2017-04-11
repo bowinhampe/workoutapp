@@ -87,4 +87,32 @@ public class ExerciseDAO extends DAO {
 
         return exercise;
     }
+
+    public ArrayList<String> getAllCategorys(){
+        Cursor c = db.rawQuery("SELECT DISTINCT "+DatabaseHandler.EXERCISES_COLUMN_CATEGORY+" FROM "+DatabaseHandler.TABLE_EXERCISES, null);
+        ArrayList<String> allValues = new ArrayList<>();
+        try {
+            while(c.moveToNext()){
+                allValues.add(c.getString(c.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_CATEGORY)));
+            }
+        } finally {
+            c.close();
+        }
+        return allValues;
+    }
+    public ArrayList<String> getAllExerciseByCategory(String category){
+        String query = "SELECT "+DatabaseHandler.EXERCISES_COLUMN_NAME+" FROM "+DatabaseHandler.TABLE_EXERCISES+" WHERE "+DatabaseHandler.TABLE_EXERCISES+"."+DatabaseHandler.EXERCISES_COLUMN_CATEGORY + " = "+"\""+category+"\"";
+        Cursor c = db.rawQuery(query, null);
+        ArrayList<String> allValues = new ArrayList<>();
+        try {
+            while(c.moveToNext()){
+                // TODO: return Exercise instead to show description etc?
+                allValues.add(c.getString(c.getColumnIndex(DatabaseHandler.EXERCISES_COLUMN_NAME)));
+            }
+        } finally {
+            c.close();
+        }
+        return allValues;
+
+    }
 }
