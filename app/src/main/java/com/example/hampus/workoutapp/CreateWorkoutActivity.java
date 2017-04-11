@@ -22,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hampus.workoutapp.database.dao.ExerciseDAO;
+import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
+import com.example.hampus.workoutapp.entities.Exercise;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreateWorkoutActivity extends AppCompatActivity {
     private RelativeLayout baseRL;
@@ -35,12 +38,16 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     private Button addExerciseBtn;
     private Button removeExerciseBtn;
     private ArrayList<String> categorys;
+    private ArrayList<String> exercises;
     private LinearLayout llScrollView;
     private ExerciseDAO exerciseDB;
+    private WorkoutDAO workoutDB;
     private ScrollView mAddExercise;
     private Spinner mCategory;
     private Spinner mExerciseByCategory;
     private TextView mSpinnerHeaderExercise;
+    private List<Exercise> mExercisesToAdd;
+    private boolean firstLoad = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +55,18 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         initiateView();
         exerciseDB = new ExerciseDAO(this);
         exerciseDB.open();
+        workoutDB = new WorkoutDAO(this);
+        workoutDB.open();
+
+        mExercisesToAdd = new ArrayList<>();
     }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        exerciseDB.close();
+        workoutDB.close();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -145,8 +162,11 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                     // your code here
                     Log.d("DEBUG: ",id+"");
                     // TODO: Initiate Dropdown for exercises
-                    llScrollView.removeView(mExerciseByCategory);
-                    exerciseCategorySelected(categorys.get(position));
+                        llScrollView.removeView(mExerciseByCategory);
+                        if(firstLoad) {
+                            exerciseCategorySelected(categorys.get(position));
+                            firstLoad = false;
+                        }
                 }
 
                 @Override
@@ -177,16 +197,16 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         ArrayList<String> exercisesByCategorys =null;
         mExerciseByCategory = new Spinner(this);
-        ArrayList<String> spinnerArray = new ArrayList<>();
+        exercises = new ArrayList<>();
 
         // Get All exercises depending on category and add to category-defined spinner
-        exercisesByCategorys = exerciseDB.getAllExerciseByCategory(category);
+        exercises = exerciseDB.getAllExerciseByCategory(category);
         if(exercisesByCategorys!=null) {
             for (int k = 0; k < exercisesByCategorys.size(); k++) {
-                    spinnerArray.add(exercisesByCategorys.get(k));
+                    exercises.add(exercisesByCategorys.get(k));
                 }
             }
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, exercises); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mExerciseByCategory.setAdapter(spinnerArrayAdapter);
         // TODO: LISTENER
@@ -196,6 +216,13 @@ public class CreateWorkoutActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     // your code here
                     Log.d("DEBUG: ",id+"");
+                    if(!firstLoad) {
+                        firstLoad = true;
+                    }
+                    else{
+                        addExerciseModeComplete(exercises.get(position));
+                    }
+
                 }
 
                 @Override
@@ -207,7 +234,19 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         // Set spinner-name depending on category
         llScrollView.addView(mExerciseByCategory);
     }
-    public void addExerciseModeComplete(View view){
-        // TODO: Make previous mode Invisible and return to base :D with exercise added to scrollview
+    public void addExerciseModeComplete(String exerciseToAdd){
+        rlScrollView.setVisibility(View.VISIBLE);
+        workoutNameText.setVisibility(View.VISIBLE);
+        exerciseText.setVisibility(View.VISIBLE);
+        workoutNameEdit.setVisibility(View.VISIBLE);
+        addExerciseBtn.setVisibility(View.VISIBLE);
+        removeExerciseBtn.setVisibility(View.VISIBLE);
+
+        llScrollView.setVisibility(View.INVISIBLE);
+
+        // TODO Exercise toAdd = exerciseDB.getExerciseByName(exerciseToAdd);
+        //mExercisesToAdd.add(toAdd);
+
+
     }
 }
