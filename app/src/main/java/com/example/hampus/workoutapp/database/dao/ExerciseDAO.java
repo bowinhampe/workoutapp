@@ -88,6 +88,18 @@ public class ExerciseDAO extends DAO {
         return exercise;
     }
 
+    public Exercise getExerciseByName(String name) {
+        Exercise exercise = null;
+
+        Cursor cursor = this.getDb().rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_EXERCISES + " WHERE " + DatabaseHandler.EXERCISES_COLUMN_NAME + " = " + name, null);
+
+        if (!cursor.isAfterLast()) {
+            exercise = cursorToExercise(cursor);
+        }
+
+        return exercise;
+    }
+
     public ArrayList<String> getAllCategorys(){
         Cursor c = db.rawQuery("SELECT DISTINCT "+DatabaseHandler.EXERCISES_COLUMN_CATEGORY+" FROM "+DatabaseHandler.TABLE_EXERCISES, null);
         ArrayList<String> allValues = new ArrayList<>();
