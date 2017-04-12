@@ -159,7 +159,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         mAddExercise.addView(llScrollView);
         mSpinnerHeaderExercise = new TextView(this);
 
-        categorys = exerciseDB.getAllCategorys();
+        categorys = exerciseDB.getAllCategories();
         mCategory = new Spinner(this);
         Log.d(categorys.size()+": SIZEOF","cat");
         TextView spinnerHeader = new TextView(this);
@@ -215,7 +215,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         exercises = new ArrayList<>();
 
         // Get All exercises depending on category and add to category-defined spinner
-        exercises = exerciseDB.getAllExerciseByCategory(category);
+        exercises = exerciseDB.getAllExerciseNamesByCategory(category);
         if(exercisesByCategorys!=null) {
             for (int k = 0; k < exercisesByCategorys.size(); k++) {
                     exercises.add(exercisesByCategorys.get(k));
