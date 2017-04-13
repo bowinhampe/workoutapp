@@ -25,6 +25,7 @@ import com.example.hampus.workoutapp.database.dao.ExerciseDAO;
 import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
 import com.example.hampus.workoutapp.entities.Exercise;
 import com.example.hampus.workoutapp.entities.Workout;
+import com.example.hampus.workoutapp.entities.WorkoutSession;
 
 import java.util.ArrayList;
 import java.util.List;

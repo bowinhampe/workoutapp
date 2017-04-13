@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.hampus.workoutapp.database.dao.WorkoutDAO;
 import com.example.hampus.workoutapp.entities.Exercise;
 import com.example.hampus.workoutapp.entities.Workout;
+import com.example.hampus.workoutapp.entities.WorkoutSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class WorkoutActivity extends ListActivity {
     private WorkoutDAO workoutDAO;
     private long workoutId;
+    private List<WorkoutSession> mWorkoutSessions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class WorkoutActivity extends ListActivity {
             workoutId = savedInstanceState.getLong("WorkoutId");
         }
         Log.d("DEBUG", Long.toString(workoutId));
+        mWorkoutSessions = new ArrayList<>();
         this.initiateDB();
     }
 
@@ -78,6 +81,8 @@ public class WorkoutActivity extends ListActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exerciseNames);
         setListAdapter(adapter);
+
+        this.workoutDAO.createNewSession(this.workoutId);
     }
 
     @Override

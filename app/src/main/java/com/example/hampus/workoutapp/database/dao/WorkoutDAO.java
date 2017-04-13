@@ -4,12 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.provider.ContactsContract;
 
 import com.example.hampus.workoutapp.entities.Exercise;
 import com.example.hampus.workoutapp.entities.Workout;
 import com.example.hampus.workoutapp.database.DatabaseHandler;
+import com.example.hampus.workoutapp.entities.WorkoutSession;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,6 +130,43 @@ public class WorkoutDAO extends DAO {
         cursor.close();
 
         return workout;
+    }
+
+    public List<WorkoutSession> createNewSession(long workoutId){
+        List<WorkoutSession> sessionArray = new ArrayList<>();
+        WorkoutSession toAdd = null;
+        // TODO fetch all WorkoutExercise ids that belongs to WorkoutId
+        String query = "SELECT "+DatabaseHandler.TABLE_WORKOUTEXERCISES+"."+DatabaseHandler.WORKOUTEXERCISES_COLUMN_ID+" FROM "
+                + DatabaseHandler.TABLE_WORKOUTEXERCISES + " INNER JOIN "
+                + DatabaseHandler.TABLE_WORKOUTS +" ON "
+                + DatabaseHandler.TABLE_WORKOUTS + "." + DatabaseHandler.WORKOUTS_COLUMN_ID +" = "+ Long.toString(workoutId);
+        SimpleDateFormat date = new SimpleDateFormat("yyyyMMDD:hh:mm");
+        Date dateOfDay = new Date();
+        String dateToSet = date.format(dateOfDay);
+        Cursor cursor = this.getDb().rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast()) {
+            toAdd = new WorkoutSession();
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_WORKOUTEXERCISES_ID, cursor.getLong(0));
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_DATE, dateToSet);
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_REPS, 0);
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_SETS, 0);
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_WEIGHT,0);
+            long workoutSessionID = this.getDb().insert(DatabaseHandler.WORKOUTSESSION_COLUMN_ID, null,
+                    values);
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_ID, workoutSessionID);
+            cursor.moveToNext();
+            toAdd.setId(workoutSessionID);
+            toAdd.setDate(dateToSet);
+            toAdd.setReps(0);
+            toAdd.setSets(0);
+            toAdd.setWeight(0);
+            sessionArray.add(toAdd);
+        }
+        return sessionArray;
+
     }
 
     private Workout cursorToWorkout(Cursor cursor) {

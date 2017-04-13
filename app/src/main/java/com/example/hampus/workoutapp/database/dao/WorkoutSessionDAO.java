@@ -43,12 +43,13 @@ public class WorkoutSessionDAO extends DAO {
             super.close();
         }
 
-        public WorkoutSession createWorkoutSession(String date, int set, int rep, int weight) {
+        public WorkoutSession createWorkoutSession(String date,long fk, int set, int rep, int weight) {
             ContentValues values = new ContentValues();
 
             long workoutSessionId = this.getDb().insert(DatabaseHandler.TABLE_WORKOUTSESSION, null,
                     values);
 
+            values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_WORKOUTEXERCISES_ID,fk);
             values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_DATE, date);
             values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_SETS, set);
             values.put(DatabaseHandler.WORKOUTSESSION_COLUMN_REPS, rep);

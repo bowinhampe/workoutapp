@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Daniel on 4/7/2017.
@@ -64,11 +65,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_WORKOUTSESSION = "create table "+ TABLE_WORKOUTSESSION + "("
             +WORKOUTSESSION_COLUMN_ID+ " integer primary key autoincrement, "
-            +"foreign key(" +WORKOUTSESSION_COLUMN_WORKOUTEXERCISES_ID +") references "+TABLE_WORKOUTEXERCISES+ "("+ WORKOUTEXERCISES_COLUMN_ID+"), "
+            +WORKOUTSESSION_COLUMN_WORKOUTEXERCISES_ID+ " integer not null, "
             +WORKOUTSESSION_COLUMN_DATE +" text not null, "
             +WORKOUTSESSION_COLUMN_SETS +" integer, "
             +WORKOUTSESSION_COLUMN_REPS + " integer , "
-            +WORKOUTSESSION_COLUMN_WEIGHT +" integer"
+            +WORKOUTSESSION_COLUMN_WEIGHT +" integer , "
+            +"foreign key(" +WORKOUTSESSION_COLUMN_WORKOUTEXERCISES_ID +") "+"references " +TABLE_WORKOUTEXERCISES+ "("+ WORKOUTEXERCISES_COLUMN_ID+")"
             +");";
 
     public DatabaseHandler(Context context) {
@@ -80,6 +82,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_WORKOUTS);
         db.execSQL(CREATE_TABLE_EXERCISES);
         db.execSQL(CREATE_TABLE_WORKOUTEXERCISES);
+        System.out.println("######################");
+        System.out.println(CREATE_TABLE_WORKOUTEXERCISES);
+        System.out.println(CREATE_TABLE_WORKOUTSESSION);
+        System.out.println("########################");
         db.execSQL(CREATE_TABLE_WORKOUTSESSION);
     }
 
